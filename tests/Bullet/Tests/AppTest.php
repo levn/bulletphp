@@ -925,6 +925,26 @@ class AppTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('', $response->content());
     }
 
+    public function testReamainingUrl()
+    {
+        $expects = null;
+
+        $app = new Bullet\App();
+        $app->path('this', function($request) use($app, &$expects) {
+            $expects = $app->remainingPath();
+            $app->path('remaining', function($request) use($app) {
+                $app->path('path', function($request) use($app) {
+                    return 'Got here!';
+                });
+            });
+        });
+
+        $request = new \Bullet\Request('GET', '/this/remaining/path');
+        $result = $app->run($request);
+
+        $this->assertEquals($expects, 'remaining/path');
+    }
+
     public function testSubdomainRoute()
     {
         $app = new Bullet\App();
@@ -1056,6 +1076,20 @@ class AppTest extends \PHPUnit_Framework_TestCase
         $result = $app->run($request);
 
         $this->assertEquals(404, $result->status());
+    }
+
+    public function testResponseWithLocationHeaderMaintainsSetStatusCode()
+    {
+        $app = new Bullet\App();
+        $app->path('location', function($request) use($app) {
+            $app->post(function() use($app) {
+                return $app->response(201)->header('Location', 'http://google.com');
+            });
+        });
+
+        $result = $app->run('POST', '/location/');
+        $this->assertEquals(201, $result->status());
+        $this->assertEquals('http://google.com', $result->header('Location'));
     }
 
     public function testDefaultArrayToJSONContentConverter()

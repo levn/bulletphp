@@ -187,6 +187,7 @@ class App extends \Pimple
         $paths = explode('/', $this->_requestPath);
         foreach($paths as $pos => $path) {
             $this->_currentPath = implode('/', array_slice($paths, 0, $pos+1));
+            $this->_remainingPath = implode('/', array_slice($paths, $pos+1));
 
             // Run and get result
             try {
@@ -396,6 +397,14 @@ class App extends \Pimple
     public function currentPath()
     {
         return $this->_currentPath;
+    }
+
+    /**
+     * Getter for remaining path
+     */
+    public function remainingPath()
+    {
+        return $this->_remainingPath;
     }
 
     /**

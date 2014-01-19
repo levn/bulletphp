@@ -329,7 +329,12 @@ class Response
         // Send all headers
         foreach($this->_headers as $key => $value) {
             if(!is_null($value)) {
-                header($key . ": " . $value);
+                // Ensure 'Location' is sent with proper HTTP status code if set
+                if(strtolower($key) === "location") {
+                    header($key . ": " . $value, true, $this->status());
+                } else {
+                    header($key . ": " . $value);
+                }
             }
         }
     }
