@@ -4,7 +4,7 @@ namespace Bullet;
 use Pimple\Container;
 use Bullet\Request;
 use Bullet\Response;
-use View\Template;
+use Bullet\View\Template;
 
 class App extends Container
 {
