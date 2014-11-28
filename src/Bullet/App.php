@@ -2,6 +2,8 @@
 namespace Bullet;
 
 use Pimple\Container;
+use Bullet\Request;
+use Bullet\Response;
 
 class App extends Container
 {
@@ -160,12 +162,12 @@ class App extends Container
         self::$_pathLevel = 0;
 
         // If Request instance was passed in as the first parameter
-        if($method instanceof \Bullet\Request) {
+        if($method instanceof Request) {
             $request = $method;
             $this->_request = $request;
         // Create new Request object from passed method and URI
         } else {
-            $this->_request = new \Bullet\Request($method, $uri);
+            $this->_request = new Request($method, $uri);
         }
         $this->_requestMethod = strtoupper($this->_request->method());
         $this->_requestPath = $this->_request->url();
@@ -372,13 +374,13 @@ class App extends Container
             $res = $this->_response;
 
         // Set response
-        } elseif($statusCode instanceof \Bullet\Response) {
+        } elseif($statusCode instanceof Response) {
             $res = $this->_response = $statusCode;
         }
 
         // Create new response if none is going to be returned
         if($res === null) {
-            $res = new \Bullet\Response($content, $statusCode);
+            $res = new Response($content, $statusCode);
 
             // If content not set, use default HTTP
             if($content === null) {
@@ -407,7 +409,7 @@ class App extends Container
     public function request()
     {
         if($this->_request === null) {
-            $this->_request = new \Bullet\Request();
+            $this->_request = new Request();
         }
         return $this->_request;
     }
@@ -799,7 +801,7 @@ class App extends Container
             $response = $this->response($response);
         } else {
             // Convert response to Bullet\Response object if not one already
-            if(!($response instanceof \Bullet\Response)) {
+            if(!($response instanceof Response)) {
                 $response = $this->response(200, $response);
             }
         }
