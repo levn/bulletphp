@@ -4,6 +4,7 @@ namespace Bullet;
 use Pimple\Container;
 use Bullet\Request;
 use Bullet\Response;
+use View\Template;
 
 class App extends Container
 {
@@ -72,7 +73,7 @@ class App extends Container
             $this['template'] = $this['template.cfg'];
         }
         if(isset($this['template'])) {
-            View\Template::config($this['template']);
+            Template::config($this['template']);
         }
 
         // Get callback stacks ready
@@ -584,7 +585,7 @@ class App extends Container
      */
     public function template($name, array $params = array())
     {
-        $tpl = new View\Template($name);
+        $tpl = new Template($name);
         $tpl->set($params);
         return $tpl;
     }
