@@ -397,17 +397,17 @@ class Response
     public function __toString()
     {
         // Get body content to return
-        try {
+        // try {
             $content = (string) $this->content();
-        } catch(\Exception $e) {
-            $content = (string) $e;
-            $this->status(500);
-        }
+        // } catch(\Exception $e) {
+        //     $content = (string) $e;
+        //     $this->status(500);
+        // }
 
         // Write and close session
-        if(session_id()) {
-            session_write_close();
-        }
+        // if(session_id()) {
+        //     session_write_close();
+        // }
 
         // Send headers if not already sent
         if(!headers_sent()) {
